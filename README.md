@@ -1,5 +1,5 @@
 # Crypto Blue :blue_book:
-A collection of Node-RED nodes for crypto utilities using the [node-forge](#https://www.npmjs.com/package/node-forge) module.
+A collection of Node-RED nodes for crypto utilities using the [node-forge](https://www.npmjs.com/package/node-forge) module.
 
 ## Installation :zap:
 To install the collection execute the following command inside the `./.node-red` directory:
