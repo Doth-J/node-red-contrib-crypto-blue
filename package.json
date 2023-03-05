@@ -19,7 +19,7 @@
     "node": ">=14"
     },
    "node-red": {
-      "version": ">=2.0.0",
+      "version": ">=3.0.4",
       "nodes": {
          "cryptoBlue": "nodes/cryptoBlue.js"
       }
