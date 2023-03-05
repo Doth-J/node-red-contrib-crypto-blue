@@ -1,0 +1,462 @@
+<!-- CIPHER NODE -->
+<script type="text/javascript" id="node-cipher">
+    RED.nodes.registerType('cipher',{
+        category:'CryptoBlue',
+        color:'#3FADB5',
+        icon:"cipher.svg",
+        inputs:1,
+        inputLabels: "plaintext",
+        outputs:1,
+        outputLabels: "ciphertext",
+        defaults: {
+            name: {value:''},
+            function:{value:'Encrypt'},
+            algorithm:{value:''},
+            iv:{value:''},
+            key:{value:''},
+            ivSize:{value:''},
+            keySize:{value:''}
+        },
+        oneditprepare:function(){
+            $("#node-input-function").typedInput({
+                type:"str",
+                types: [
+                    {
+                        options: [
+                            { value: "Encrypt"},
+                            { value: "Decrypt"},
+                        ]
+                    }
+                ]
+            })
+            $("#node-input-algorithm").typedInput({
+                type:"str",
+                types: [
+                    {
+                        value: "AES-CBC",
+                        options: [
+                            { value: "AES-ECB"},
+                            { value: "AES-CBC"},
+                            { value: "AES-CFB"},
+                            { value: "AES-OFB"},
+                            { value: "AES-CTR"},
+                            { value: "AES-GCM"}
+                        ]
+                    }
+                ]
+            })
+            $("#node-input-iv").typedInput({
+                type:"str",
+                types:["str"]
+            })
+            $("#node-input-key").typedInput({
+                type:"str",
+                types:["str"]
+            })
+            $("#node-input-ivSize").typedInput({
+                type:"num",
+                types: [
+                    {
+                        value: 16,
+                        options: [
+                            { value: 16, label:"128 bit"},
+                            { value: 24, label:"192 bit"},
+                            { value: 32, label:"256 bit"},
+                        ]
+                    }
+                ]
+            })
+            $("#node-input-keySize").typedInput({
+                type:"num",
+                types: [
+                    {
+                        value: 16,
+                        options: [
+                            { value: 16, label:"128 bit"},
+                            { value: 24, label:"192 bit"},
+                            { value: 32, label:"256 bit"},
+                        ]
+                    }
+                ]
+            })
+        },
+        paletteLabel:"Cipher",
+        label: function(){
+            return this.name || this.function
+        }
+    });
+</script>
+<script type="text/html" data-template-name="cipher">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-function"><i class="fa fa-square"></i> Function</label>
+        <input type="text" id="node-input-function">
+    </div>
+    <div class="form-row">
+        <label for="node-input-algorithm"><i class="fa fa-book"></i> Algorithm</label>
+        <input type="text" id="node-input-algorithm">
+    </div>
+    <div class="form-row">
+        <label for="node-input-iv"><i class="fa fa-compass"></i> IV</label>
+        <input type="text" id="node-input-iv">
+    </div>
+    <div class="form-row">
+        <label for="node-input-ivSize"><i class="fa fa-cog"></i> IV Size</label>
+        <input type="text" id="node-input-ivSize">
+    </div>
+    <div class="form-row">
+        <label for="node-input-key"><i class="fa fa-key"></i> Key</label>
+        <input type="text" id="node-input-key">
+    </div>
+    <div class="form-row">
+        <label for="node-input-keySize"><i class="fa fa-cog"></i> Key Size</label>
+        <input type="text" id="node-input-keySize">
+    </div>
+</script>
+<script type="text/html" data-help-name="cipher">
+    <p>Block Cipher Node-RED node.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+    <dt>function
+        <span class="property-type">string</span>
+    </dt>
+    <dt>mode
+        <span class="property-type">string</span>
+    </dt>
+    <dt>ivSize
+        <span class="property-type">number</span>
+    </dt>
+    <dt>iv
+        <span class="property-type">string</span>
+    </dt>
+    <dt>keySize
+        <span class="property-type">number</span>
+    </dt>
+    <dt>key
+        <span class="property-type">string</span>
+    </dt>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+    <dt>iv
+        <span class="property-type">string</span>
+    </dt>
+    <dt>key
+        <span class="property-type">string</span>
+    </dt>
+    <dt>encrypted / decrypted
+        <span class="property-type">string</span>
+    </dt>
+    <h3>Details</h3>
+    <p>Block cipher node for encrypting payloads.</p>
+</script>
+
+<!-- PKDF NODE -->
+<script type="text/javascript" id="node-pkdf">
+    RED.nodes.registerType('pkdf',{
+        category:'CryptoBlue',
+        color:'#3FADB5',
+        icon:'pkdf.svg',
+        inputs:1,
+        inputLabels: "password",
+        outputs:1,
+        outputLabels: "key",
+        defaults: {
+            name: {value:''},
+            keySize:{value:''},
+            iterations:{value:''},
+            salt: {value:''},
+            saltSize: {value:''},
+            password: {value:''}
+        },
+        oneditprepare:function(){
+            $("#node-input-keySize").typedInput({
+                type:"num",
+                types: [
+                    {
+                        value: 16,
+                        options: [
+                            { value: 16, label:"128 bit"},
+                            { value: 24, label:"192 bit"},
+                            { value: 32, label:"256 bit"},
+                        ]
+                    }
+                ]
+            })
+            $("#node-input-iterations").typedInput({
+                type:"num",
+                types:["num"]
+            })
+            $("#node-input-salt").typedInput({
+                type:"str",
+                types:["str"]
+            })
+            $("#node-input-saltSize").typedInput({
+                type:"num",
+                types: [
+                    {
+                        value: 128,
+                        options: [
+                            { value: 16, label:'128 bit'},
+                            { value: 24, label:'194 bit'},
+                            { value: 32, label:'256 bit'},
+                            { value: 64, label:'512 bit'},
+                            { value: 128, label:'1024 bit'},
+                            { value: 256, label:'2048 bit'},
+                            { value: 512, label:'4096 bit'}
+                        ]
+                    }
+                ]
+            })
+            $("#node-input-password").typedInput({
+                type:"str",
+                types:["str"]
+            })
+        },
+        paletteLabel:"PKDF",
+        label: function(){
+            return this.name || 'KeyDerivationFunction'
+        }
+    });
+</script>
+<script type="text/html" data-template-name="pkdf">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-iterations"><i class="fa fa-cog"></i> Iterations</label>
+        <input type="number" id="node-input-iterations" max="50">
+    </div>
+    <div class="form-row">
+        <label for="node-input-keySize"><i class="fa fa-key"></i> Key Size</label>
+        <input type="text" id="node-input-keySize">
+    </div>
+    <div class="form-row">
+        <label for="node-input-saltSize"><i class="fa fa-cog"></i> Salt Size</label>
+        <input type="text" id="node-input-saltSize">
+    </div>
+    <div class="form-row">
+        <label for="node-input-salt"><i class="fa fa-th"></i> Salt</label>
+        <input type="text" id="node-input-salt">
+    </div>
+    <div class="form-row">
+        <label for="node-input-password"><i class="fa fa-lock"></i> Password</label>
+        <input type="text" id="node-input-password">
+    </div>
+</script>
+<script type="text/html" data-help-name="pkdf">
+    <p>Password Key Derivation Function Node-RED node.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+    <dt>iterations
+        <span class="property-type">number</span>
+    </dt>
+    <dt>salt
+        <span class="property-type">string</span>
+    </dt>
+    <dt>saltSize
+        <span class="property-type">number</span>
+    </dt>
+    <dt>password
+        <span class="property-type">string</span>
+    </dt>
+    <dt>keySize
+        <span class="property-type">number</span>
+    </dt>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+    <dt>salt
+        <span class="property-type">string</span>
+    </dt>
+    <dt>key
+        <span class="property-type">string</span>
+    </dt>
+    <h3>Details</h3>
+    <p>A Password Key Derivartion Function node for creating encryption keys.</p>
+</script>
+
+<!-- PKI NODE -->
+<script type="text/javascript" id="node-pki">
+    RED.nodes.registerType('pki',{
+        category:'CryptoBlue',
+        color:'#3FADB5',
+        icon:'pki.svg',
+        inputs:1,
+        inputLabels: "message",
+        outputs:1,
+        outputLabels: function(){
+            if(this.function=="Generate Keys") return "keypair"
+            if(this.function=="Sign Payload") return "signed"
+            if(this.function=="Verify Signature") return "verified"
+        },
+        defaults: {
+            name: {value:''},
+            function:{value:'Generate'},
+            privateKey:{value:''},
+            publicKey:{value:''},
+        },
+        oneditprepare:function(){   
+            $("#node-input-function").typedInput({
+                type:"str",
+                types: [
+                    {
+                        options: [
+                            { value: "Generate Keys"},
+                            { value: "Sign Payload"},
+                            { value: "Verify Signature"},
+                        ]
+                    }
+                ]
+            })
+            $("#node-input-privateKey").typedInput({
+                type:"str",
+                types:["str"]
+            })
+            $("#node-input-publicKey").typedInput({
+                type:"str",
+                types:["str"]
+            })
+        },
+        paletteLabel:"PKI",
+        label: function(){
+            return this.name || this.function
+        }
+    });
+</script>
+<script type="text/html" data-template-name="pki">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-function"><i class="fa fa-square"></i> Function</label>
+        <input type="text" id="node-input-function">
+    </div>
+    <div class="form-row">
+        <label for="node-input-privateKey"><i class="fa fa-circle"></i> Private Key</label>
+        <input type="text" id="node-input-privateKey">
+    </div>
+    <div class="form-row">
+        <label for="node-input-publicKey"><i class="fa fa-dot-circle-o"></i> Public Key</label>
+        <input type="text" id="node-input-publicKey">
+    </div>
+</script>
+<script type="text/html" data-help-name="pki">
+    <p>Public Key Infastructure Node-RED node.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+    <dt>payload
+        <span class="property-type">string</span>
+    </dt>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+    <dt>payload
+        <span class="property-type">string</span>
+    </dt>
+    <h3>Details</h3>
+    <p>Public Key Infrastructure node for generating Ed25519 keys, signing payloads and verifying signatures.</p>
+</script>
+
+<!-- HASHER NODE -->
+<script type="text/javascript" id="node-hasher">
+    RED.nodes.registerType('hasher',{
+        category:'CryptoBlue',
+        color:'#3FADB5',
+        icon:'hasher.svg',
+        inputs:1,
+        inputLabels: "message",
+        outputs:1,
+        outputLabels: function(){
+            if(this.function=="Generate Hash") return "hash"
+            if(this.function=="Generate HMAC") return "hmac"
+            if(this.function=="Verify Hash" || this.function=="Verify HMAC") return "verification"
+        },
+        defaults: {
+            name: {value:''},
+            function:{value:'Generate Hash'},
+            hashSize:{value:'SHA256'},
+            hmacKey:{value:''},
+            verification:{value:''},
+        },
+        oneditprepare:function(){   
+            $("#node-input-function").typedInput({
+                type:"str",
+                types: [
+                    {
+                        options: [
+                            { value: "Generate Hash"},
+                            { value: "Generate HMAC"},
+                            { value: "Verify Hash"},
+                            { value: "Verify HMAC"},
+                        ]
+                    }
+                ]
+            })
+            $("#node-input-hashSize").typedInput({
+                type:"str",
+                types:[{
+                    options:[
+                        {value:"SHA256", label:"256 bit"},
+                        {value:"SHA384", label:"384 bit"},
+                        {value:"SHA512", label:"512 bit"},
+                    ]
+                }]
+            })
+            $("#node-input-hmacKey").typedInput({
+                type:"str",
+                types:["str"]
+            })
+            $("#node-input-verification").typedInput({
+                type:"str",
+                types:["str"]
+            })
+        },
+        paletteLabel:"Hasher",
+        label: function(){
+            return this.name || this.function
+        }
+    });
+</script>
+<script type="text/html" data-template-name="hasher">
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-function"><i class="fa fa-square"></i> Function</label>
+        <input type="text" id="node-input-function">
+    </div>
+    <div class="form-row">
+        <label for="node-input-hashSize"><i class="fa fa-arrows-h"></i> Hash Size</label>
+        <input type="text" id="node-input-hashSize">
+    </div>
+    <div class="form-row">
+        <label for="node-input-hmacKey"><i class="fa fa-key"></i> HMAC Key</label>
+        <input type="text" id="node-input-hmacKey">
+    </div>
+    <div class="form-row">
+        <label for="node-input-verification"><i class="fa fa-tag"></i> Verification</label>
+        <input type="text" id="node-input-verification">
+    </div>
+</script>
+<script type="text/html" data-help-name="hasher">
+    <p>Node-RED hash utilies node.</p>
+    <h3>Inputs</h3>
+    <dl class="message-properties">
+    <dt>payload
+        <span class="property-type">string</span>
+    </dt>
+    <h3>Outputs</h3>
+    <dl class="message-properties">
+    <dt>hash / hmac
+        <span class="property-type">string</span>
+    </dt>
+    <dt> verification
+        <span class="property-type">boolean</span>
+    </dt>
+    <h3>Details</h3>
+    <p>Node-RED node for generating and verifying hashes</p>
+</script>
