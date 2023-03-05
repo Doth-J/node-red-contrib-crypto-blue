@@ -4,12 +4,19 @@
    "description": "Node-RED nodes for cryptographic utilities",
    "license": "Apache-2.0",
    "version": "0.0.2",
-   "keywords": [
-      "node-red",
-      "node-inq",
-      "crypto-blue",
-      "physics"
+   "repository": {
+      "type": "git",
+      "url": "https://github.com/Doth-J/node-red-contrib-crypto-blue"
+  },
+  "keywords": [
+     "node-red",
+     "node-inq",
+     "crypto-blue",
+     "physics"
    ],
+   "engines": {
+    "node": ">=14"
+    },
    "node-red": {
       "version": ">=3.0.0",
       "nodes": {
