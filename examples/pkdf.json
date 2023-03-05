@@ -1,0 +1,115 @@
+[
+    {
+        "id": "b5d796b9e6213bd8",
+        "type": "inject",
+        "z": "d4703d9e2676369d",
+        "name": "PKDF Injector",
+        "props": [
+            {
+                "p": "password",
+                "v": "MySecretPassword",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 170,
+        "y": 540,
+        "wires": [
+            [
+                "3da33a90d6b838a5"
+            ]
+        ]
+    },
+    {
+        "id": "3da33a90d6b838a5",
+        "type": "pkdf",
+        "z": "d4703d9e2676369d",
+        "name": "Generate Encryption Key",
+        "keySize": "16",
+        "iterations": "10",
+        "salt": "",
+        "saltSize": "16",
+        "password": "",
+        "x": 410,
+        "y": 540,
+        "wires": [
+            [
+                "143cfa16f14be5d1",
+                "e1a3b98a756c2b90"
+            ]
+        ]
+    },
+    {
+        "id": "143cfa16f14be5d1",
+        "type": "debug",
+        "z": "d4703d9e2676369d",
+        "name": "Print Payload Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 720,
+        "y": 600,
+        "wires": []
+    },
+    {
+        "id": "52edbee3c4a5a60f",
+        "type": "pkdf",
+        "z": "d4703d9e2676369d",
+        "name": "Recreate Encryption Key",
+        "keySize": "16",
+        "iterations": "10",
+        "salt": "73da2dd430730da44a7e82a2dc82cdbc",
+        "saltSize": "16",
+        "password": "",
+        "x": 410,
+        "y": 660,
+        "wires": [
+            [
+                "143cfa16f14be5d1"
+            ]
+        ]
+    },
+    {
+        "id": "e1a3b98a756c2b90",
+        "type": "change",
+        "z": "d4703d9e2676369d",
+        "name": "Set Salt to Recreate Key",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.salt",
+                "pt": "msg",
+                "to": "salt",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "password",
+                "pt": "msg",
+                "to": "MySecretPassword",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 410,
+        "y": 600,
+        "wires": [
+            [
+                "52edbee3c4a5a60f"
+            ]
+        ]
+    }
+]

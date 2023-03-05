@@ -1,0 +1,154 @@
+[
+    {
+        "id": "5443d85005faa87a",
+        "type": "inject",
+        "z": "d4703d9e2676369d",
+        "name": "Hash Injector",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "verification",
+                "v": "a591a6d40bf420404a011733cfb7b190d62c65bf0bcda32b57b277d9ad9f146e",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "Hello World",
+        "payloadType": "str",
+        "x": 170,
+        "y": 580,
+        "wires": [
+            [
+                "85420e3c17146a89",
+                "5b37225f13f7b84d"
+            ]
+        ]
+    },
+    {
+        "id": "85420e3c17146a89",
+        "type": "hasher",
+        "z": "d4703d9e2676369d",
+        "name": "",
+        "function": "Generate Hash",
+        "hashSize": "SHA256",
+        "hmacKey": "",
+        "verification": "",
+        "x": 360,
+        "y": 560,
+        "wires": [
+            [
+                "7efaef752a58475c"
+            ]
+        ]
+    },
+    {
+        "id": "7efaef752a58475c",
+        "type": "debug",
+        "z": "d4703d9e2676369d",
+        "name": "Print Payload Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "5b37225f13f7b84d",
+        "type": "hasher",
+        "z": "d4703d9e2676369d",
+        "name": "",
+        "function": "Verify Hash",
+        "hashSize": "SHA256",
+        "hmacKey": "",
+        "verification": "",
+        "x": 350,
+        "y": 600,
+        "wires": [
+            [
+                "7efaef752a58475c"
+            ]
+        ]
+    },
+    {
+        "id": "7f4461a8f9abea69",
+        "type": "inject",
+        "z": "d4703d9e2676369d",
+        "name": "HMAC Injector",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "key",
+                "v": "SecretKey",
+                "vt": "str"
+            },
+            {
+                "p": "verification",
+                "v": "50082da69e7e4780c867be198e795b9cd5e94e739ee9485aa95a70f60e36e73f",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "Hello World",
+        "payloadType": "str",
+        "x": 180,
+        "y": 680,
+        "wires": [
+            [
+                "e347159f8bac216f",
+                "206bca76e7230862"
+            ]
+        ]
+    },
+    {
+        "id": "e347159f8bac216f",
+        "type": "hasher",
+        "z": "d4703d9e2676369d",
+        "name": "",
+        "function": "Generate HMAC",
+        "hashSize": "SHA256",
+        "hmacKey": "",
+        "verification": "",
+        "x": 360,
+        "y": 660,
+        "wires": [
+            [
+                "7efaef752a58475c"
+            ]
+        ]
+    },
+    {
+        "id": "206bca76e7230862",
+        "type": "hasher",
+        "z": "d4703d9e2676369d",
+        "name": "",
+        "function": "Verify HMAC",
+        "hashSize": "SHA256",
+        "hmacKey": "",
+        "verification": "",
+        "x": 350,
+        "y": 700,
+        "wires": [
+            [
+                "7efaef752a58475c"
+            ]
+        ]
+    }
+]

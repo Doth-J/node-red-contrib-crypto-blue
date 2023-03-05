@@ -1,0 +1,174 @@
+[
+    {
+        "id": "17948feedf2ac783",
+        "type": "inject",
+        "z": "d4703d9e2676369d",
+        "name": "Cipher Injector",
+        "props": [
+            {
+                "p": "password",
+                "v": "S3cr3tPassword",
+                "vt": "str"
+            },
+            {
+                "p": "plaintext",
+                "v": "Hello World",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 180,
+        "y": 560,
+        "wires": [
+            [
+                "bff69d8ca91a3429"
+            ]
+        ]
+    },
+    {
+        "id": "b34b1dd96cbf8cb1",
+        "type": "cipher",
+        "z": "d4703d9e2676369d",
+        "name": "",
+        "function": "Encrypt",
+        "algorithm": "AES-CBC",
+        "iv": "",
+        "key": "",
+        "ivSize": "16",
+        "keySize": "16",
+        "x": 600,
+        "y": 620,
+        "wires": [
+            [
+                "90379e0896fbed91",
+                "fd87104e97589bfa"
+            ]
+        ]
+    },
+    {
+        "id": "bff69d8ca91a3429",
+        "type": "pkdf",
+        "z": "d4703d9e2676369d",
+        "name": "Generate Encryption Key",
+        "keySize": "16",
+        "iterations": "10",
+        "salt": "",
+        "saltSize": "16",
+        "password": "",
+        "x": 410,
+        "y": 560,
+        "wires": [
+            [
+                "adca33df436fee27"
+            ]
+        ]
+    },
+    {
+        "id": "adca33df436fee27",
+        "type": "change",
+        "z": "d4703d9e2676369d",
+        "name": "Set Key and Plaintext",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.key",
+                "pt": "msg",
+                "to": "key",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "plaintext",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 400,
+        "y": 620,
+        "wires": [
+            [
+                "b34b1dd96cbf8cb1"
+            ]
+        ]
+    },
+    {
+        "id": "90379e0896fbed91",
+        "type": "debug",
+        "z": "d4703d9e2676369d",
+        "name": "Print Payload Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 860,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "fd87104e97589bfa",
+        "type": "change",
+        "z": "d4703d9e2676369d",
+        "name": "Set IV and Encrypted",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.iv",
+                "pt": "msg",
+                "to": "iv",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "payload.encrypted",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 400,
+        "y": 680,
+        "wires": [
+            [
+                "c56a1c73d74e0b1b"
+            ]
+        ]
+    },
+    {
+        "id": "c56a1c73d74e0b1b",
+        "type": "cipher",
+        "z": "d4703d9e2676369d",
+        "name": "",
+        "function": "Decrypt",
+        "algorithm": "AES-CBC",
+        "iv": "",
+        "key": "",
+        "ivSize": "16",
+        "keySize": "16",
+        "x": 600,
+        "y": 680,
+        "wires": [
+            [
+                "90379e0896fbed91"
+            ]
+        ]
+    }
+]

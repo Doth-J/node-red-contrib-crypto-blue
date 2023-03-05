@@ -1,0 +1,135 @@
+[
+    {
+        "id": "7c3f6a136657225e",
+        "type": "inject",
+        "z": "d4703d9e2676369d",
+        "name": "PKI Injector",
+        "props": [
+            {
+                "p": "message",
+                "v": "Hello World",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 1190,
+        "y": 680,
+        "wires": [
+            [
+                "90622efcab74bc6c"
+            ]
+        ]
+    },
+    {
+        "id": "90622efcab74bc6c",
+        "type": "pki",
+        "z": "d4703d9e2676369d",
+        "name": "",
+        "function": "Generate Keys",
+        "privateKey": "",
+        "publicKey": "",
+        "x": 1480,
+        "y": 680,
+        "wires": [
+            [
+                "00468b1e27963b46",
+                "6517de1a33dabbdf"
+            ]
+        ]
+    },
+    {
+        "id": "00468b1e27963b46",
+        "type": "debug",
+        "z": "d4703d9e2676369d",
+        "name": "Print Payload Result",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1740,
+        "y": 740,
+        "wires": []
+    },
+    {
+        "id": "04cf4d21c4ea859e",
+        "type": "pki",
+        "z": "d4703d9e2676369d",
+        "name": "",
+        "function": "Sign Payload",
+        "privateKey": "",
+        "publicKey": "",
+        "x": 1490,
+        "y": 740,
+        "wires": [
+            [
+                "00468b1e27963b46",
+                "c160f5df437874c3"
+            ]
+        ]
+    },
+    {
+        "id": "6517de1a33dabbdf",
+        "type": "change",
+        "z": "d4703d9e2676369d",
+        "name": "Set Key-Pair",
+        "rules": [
+            {
+                "t": "move",
+                "p": "payload.privateKey",
+                "pt": "msg",
+                "to": "privateKey",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "payload.publicKey",
+                "pt": "msg",
+                "to": "publicKey",
+                "tot": "msg"
+            },
+            {
+                "t": "move",
+                "p": "message",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1330,
+        "y": 740,
+        "wires": [
+            [
+                "04cf4d21c4ea859e"
+            ]
+        ]
+    },
+    {
+        "id": "c160f5df437874c3",
+        "type": "pki",
+        "z": "d4703d9e2676369d",
+        "name": "",
+        "function": "Verify Signature",
+        "privateKey": "",
+        "publicKey": "",
+        "x": 1480,
+        "y": 800,
+        "wires": [
+            [
+                "00468b1e27963b46"
+            ]
+        ]
+    }
+]
