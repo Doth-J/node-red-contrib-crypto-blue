@@ -3,23 +3,14 @@
    "author": "Doth-J",
    "description": "Node-RED nodes for cryptographic utilities",
    "license": "Apache-2.0",
-   "version": "0.0.2e",
-   "repository": {
-      "type": "git",
-      "url": "https://github.com/Doth-J/node-red-contrib-crypto-blue"
-  },
-  "keywords": [
-     "node-red",
-     "node-inq",
-     "crypto-blue",
-     "blue-sec",
-     "physics"
+   "version": "0.0.1",
+   "keywords": [
+      "node-red",
+      "node-inq",
+      "crypto-blue",
+      "physics"
    ],
-   "engines": {
-    "node": ">=14"
-    },
    "node-red": {
-      "version": ">=3.0.4",
       "nodes": {
          "cryptoBlue": "nodes/cryptoBlue.js"
       }
