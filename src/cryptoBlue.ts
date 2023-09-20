@@ -115,7 +115,7 @@ export = function(RED:NodeRED.NodeAPI){
 
     function Pkdf2Node(this:NodeRED.Node, config:Pkdf2NodeConfig){
         RED.nodes.createNode(this,config);
-        this.on('input',(msg:any,send,done)=>{
+        this.on('input',(msg:any,send: (arg0: any) => void,done: () => void)=>{
             const options = {
                 saltSize: config.saltSize,
                 keySize: config.keySize,
@@ -173,6 +173,7 @@ export = function(RED:NodeRED.NodeAPI){
                     const publicKey = forge.util.createBuffer(Buffer.from(options.publicKey,'hex'));
                     const signature = forge.util.createBuffer(Buffer.from(msg.payload.signature,'hex'));
                     msg.payload = {
+                        message: msg.payload,
                         verification: pki.ed25519.verify({
                             message:md.digest(),
                             signature:signature,
