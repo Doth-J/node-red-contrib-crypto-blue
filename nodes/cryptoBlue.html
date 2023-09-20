@@ -288,9 +288,9 @@
         inputLabels: "message",
         outputs:1,
         outputLabels: function(){
-            if(this.function=="Generate Keys") return "keypair"
-            if(this.function=="Sign Payload") return "signed"
-            if(this.function=="Verify Signature") return "verified"
+            if(this.function=="generate") return "keypair"
+            if(this.function=="sign") return "signature"
+            if(this.function=="verify") return "verification"
         },
         defaults: {
             name: {value:''},
@@ -304,9 +304,9 @@
                 types: [
                     {
                         options: [
-                            { value: "Generate Keys"},
-                            { value: "Sign Payload"},
-                            { value: "Verify Signature"},
+                            { label: "Generate Keys",value:"generate"},
+                            { label: "Sign Payload", value: "sign"},
+                            { label: "Verify Signature", value:"verify"},
                         ]
                     }
                 ]

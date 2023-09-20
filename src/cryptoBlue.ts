@@ -142,11 +142,12 @@ export = function(RED:NodeRED.NodeAPI){
         const pki = forge.pki;
         this.on('input',(msg:any,send,done)=>{
             const options = {
+                function: msg.function as string || config.function,
                 privateKey: msg.privateKey as string || config.privateKey,
                 publicKey: msg.publicKey as string || config.publicKey
             }
-            switch(config.function){
-                case "Generate Keys":{
+            switch(options.function){
+                case "generate":{
                     const keys = pki.ed25519.generateKeyPair();
                     msg.payload = {
                         privateKey: forge.util.binary.hex.encode(keys.privateKey),
@@ -154,7 +155,7 @@ export = function(RED:NodeRED.NodeAPI){
                     }
                     break;
                 }
-                case "Sign Payload":{
+                case "sign":{
                     const md = forge.md.sha256.create();
                     md.update(typeof msg.payload =="string" ? msg.payload : JSON.stringify(msg.payload));
                     const privateKey = forge.util.createBuffer(Buffer.from(options.privateKey,'hex'));
@@ -167,7 +168,7 @@ export = function(RED:NodeRED.NodeAPI){
                     }
                     break;
                 }
-                case "Verify Signature":{
+                case "verify":{
                     const md = forge.md.sha256.create();
                     md.update(typeof msg.payload.message =="string" ? msg.payload.message : JSON.stringify(msg.payload.message));
                     const publicKey = forge.util.createBuffer(Buffer.from(options.publicKey,'hex'));
