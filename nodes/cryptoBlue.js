@@ -95,11 +95,12 @@ module.exports = function (RED) {
         const pki = node_forge_1.default.pki;
         this.on('input', (msg, send, done) => {
             const options = {
+                function: msg.function || config.function,
                 privateKey: msg.privateKey || config.privateKey,
                 publicKey: msg.publicKey || config.publicKey
             };
-            switch (config.function) {
-                case "Generate Keys": {
+            switch (options.function) {
+                case "generate": {
                     const keys = pki.ed25519.generateKeyPair();
                     msg.payload = {
                         privateKey: node_forge_1.default.util.binary.hex.encode(keys.privateKey),
@@ -107,7 +108,7 @@ module.exports = function (RED) {
                     };
                     break;
                 }
-                case "Sign Payload": {
+                case "sign": {
                     const md = node_forge_1.default.md.sha256.create();
                     md.update(typeof msg.payload == "string" ? msg.payload : JSON.stringify(msg.payload));
                     const privateKey = node_forge_1.default.util.createBuffer(Buffer.from(options.privateKey, 'hex'));
@@ -120,12 +121,13 @@ module.exports = function (RED) {
                     };
                     break;
                 }
-                case "Verify Signature": {
+                case "verify": {
                     const md = node_forge_1.default.md.sha256.create();
                     md.update(typeof msg.payload.message == "string" ? msg.payload.message : JSON.stringify(msg.payload.message));
                     const publicKey = node_forge_1.default.util.createBuffer(Buffer.from(options.publicKey, 'hex'));
                     const signature = node_forge_1.default.util.createBuffer(Buffer.from(msg.payload.signature, 'hex'));
                     msg.payload = {
+                        message: msg.payload,
                         verification: pki.ed25519.verify({
                             message: md.digest(),
                             signature: signature,
