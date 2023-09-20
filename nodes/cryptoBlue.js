@@ -95,11 +95,11 @@ module.exports = function (RED) {
         const pki = node_forge_1.default.pki;
         this.on('input', (msg, send, done) => {
             const options = {
-                function: msg.function || config.function,
+                operation: msg.operation || config.function,
                 privateKey: msg.privateKey || config.privateKey,
                 publicKey: msg.publicKey || config.publicKey
             };
-            switch (options.function) {
+            switch (options.operation) {
                 case "generate": {
                     const keys = pki.ed25519.generateKeyPair();
                     msg.payload = {

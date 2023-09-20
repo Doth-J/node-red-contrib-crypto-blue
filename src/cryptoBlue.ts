@@ -142,11 +142,11 @@ export = function(RED:NodeRED.NodeAPI){
         const pki = forge.pki;
         this.on('input',(msg:any,send,done)=>{
             const options = {
-                function: msg.function as string || config.function,
+                operation: msg.operation as string || config.function,
                 privateKey: msg.privateKey as string || config.privateKey,
                 publicKey: msg.publicKey as string || config.publicKey
             }
-            switch(options.function){
+            switch(options.operation){
                 case "generate":{
                     const keys = pki.ed25519.generateKeyPair();
                     msg.payload = {
