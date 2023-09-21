@@ -21,7 +21,9 @@ interface Pkdf2NodeConfig extends NodeRED.NodeDef{
 interface PKINodeConfig extends NodeRED.NodeDef{
     function:string,
     privateKey:string,
+    privateKeyType:string,
     publicKey:string
+    publicKeyType:string,
 }
 
 interface HasherNodeConfig extends NodeRED.NodeDef{
@@ -141,12 +143,38 @@ export = function(RED:NodeRED.NodeAPI){
         RED.nodes.createNode(this,config);
         const pki = forge.pki;
         this.on('input',(msg:any,send,done)=>{
-            const options = {
-                operation: msg.operation as string || config.function,
-                privateKey: msg.privateKey as string || config.privateKey,
-                publicKey: msg.publicKey as string || config.publicKey
+            let options:any = {
+                function: msg.function as string || config.function,
             }
-            switch(options.operation){
+            switch(config.privateKeyType){
+                case "str":{
+                    options.privateKey = msg.privateKey as string || config.privateKey
+                    break;
+                }
+                case "msg":{
+                    options.privateKey = msg[config.privateKey] as string
+                    break;
+                }
+                case "env":{
+                    options.privateKey= process.env.KEY as string
+                    break;
+                }
+            }
+            switch(config.publicKeyType){
+                case "str":{
+                    options.publicKey = msg.publicKey as string || config.publicKey
+                    break;
+                }
+                case "msg":{
+                    options.publicKey = msg[config.publicKey] as string
+                    break;
+                }
+                case "env":{
+                    options.publicKey= process.env.KEY as string
+                    break;
+                }
+            }
+            switch(options.function){
                 case "generate":{
                     const keys = pki.ed25519.generateKeyPair();
                     msg.payload = {
@@ -170,9 +198,9 @@ export = function(RED:NodeRED.NodeAPI){
                 }
                 case "verify":{
                     const md = forge.md.sha256.create();
-                    md.update(typeof msg.payload.message =="string" ? msg.payload.message : JSON.stringify(msg.payload.message));
+                    md.update(typeof msg.payload =="string" ? msg.payload : JSON.stringify(msg.payload));
                     const publicKey = forge.util.createBuffer(Buffer.from(options.publicKey,'hex'));
-                    const signature = forge.util.createBuffer(Buffer.from(msg.payload.signature,'hex'));
+                    const signature = forge.util.createBuffer(Buffer.from(msg.signature,'hex'));
                     msg.payload = {
                         message: msg.payload,
                         verification: pki.ed25519.verify({

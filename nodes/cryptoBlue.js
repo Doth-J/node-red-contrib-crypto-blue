@@ -94,12 +94,38 @@ module.exports = function (RED) {
         RED.nodes.createNode(this, config);
         const pki = node_forge_1.default.pki;
         this.on('input', (msg, send, done) => {
-            const options = {
-                operation: msg.operation || config.function,
-                privateKey: msg.privateKey || config.privateKey,
-                publicKey: msg.publicKey || config.publicKey
+            let options = {
+                function: msg.function || config.function,
             };
-            switch (options.operation) {
+            switch (config.privateKeyType) {
+                case "str": {
+                    options.privateKey = msg.privateKey || config.privateKey;
+                    break;
+                }
+                case "msg": {
+                    options.privateKey = msg[config.privateKey];
+                    break;
+                }
+                case "env": {
+                    options.privateKey = process.env.KEY;
+                    break;
+                }
+            }
+            switch (config.publicKeyType) {
+                case "str": {
+                    options.publicKey = msg.publicKey || config.publicKey;
+                    break;
+                }
+                case "msg": {
+                    options.publicKey = msg[config.publicKey];
+                    break;
+                }
+                case "env": {
+                    options.publicKey = process.env.KEY;
+                    break;
+                }
+            }
+            switch (options.function) {
                 case "generate": {
                     const keys = pki.ed25519.generateKeyPair();
                     msg.payload = {
@@ -123,9 +149,9 @@ module.exports = function (RED) {
                 }
                 case "verify": {
                     const md = node_forge_1.default.md.sha256.create();
-                    md.update(typeof msg.payload.message == "string" ? msg.payload.message : JSON.stringify(msg.payload.message));
+                    md.update(typeof msg.payload == "string" ? msg.payload : JSON.stringify(msg.payload));
                     const publicKey = node_forge_1.default.util.createBuffer(Buffer.from(options.publicKey, 'hex'));
-                    const signature = node_forge_1.default.util.createBuffer(Buffer.from(msg.payload.signature, 'hex'));
+                    const signature = node_forge_1.default.util.createBuffer(Buffer.from(msg.signature, 'hex'));
                     msg.payload = {
                         message: msg.payload,
                         verification: pki.ed25519.verify({

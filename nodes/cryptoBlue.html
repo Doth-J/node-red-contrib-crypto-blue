@@ -296,7 +296,9 @@
             name: {value:''},
             function:{value:'generate'},
             privateKey:{value:''},
+            privateKeyType:{value:'str'},
             publicKey:{value:''},
+            publicKeyType:{value:'str'},
         },
         oneditprepare:function(){   
             $("#node-input-function").typedInput({
@@ -313,11 +315,11 @@
             })
             $("#node-input-privateKey").typedInput({
                 type:"str",
-                types:["str"]
+                types:["str","msg","env"]
             })
             $("#node-input-publicKey").typedInput({
                 type:"str",
-                types:["str"]
+                types:["str","msg","env"]
             })
         },
         paletteLabel:"PKI",
@@ -338,10 +340,12 @@
     <div class="form-row">
         <label for="node-input-privateKey"><i class="fa fa-circle"></i> Private Key</label>
         <input type="text" id="node-input-privateKey">
+        <input type="hidden" id="node-input-privateKeyType">
     </div>
     <div class="form-row">
         <label for="node-input-publicKey"><i class="fa fa-dot-circle-o"></i> Public Key</label>
         <input type="text" id="node-input-publicKey">
+        <input type="hidden" id="node-input-publicKeyType">
     </div>
 </script>
 <script type="text/html" data-help-name="pki">
