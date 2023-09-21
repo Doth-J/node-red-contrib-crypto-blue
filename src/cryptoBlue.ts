@@ -156,7 +156,7 @@ export = function(RED:NodeRED.NodeAPI){
                     break;
                 }
                 case "env":{
-                    options.privateKey= process.env.KEY as string
+                    options.privateKey= process.env[msg.publicKey] as string
                     break;
                 }
             }
@@ -170,7 +170,7 @@ export = function(RED:NodeRED.NodeAPI){
                     break;
                 }
                 case "env":{
-                    options.publicKey= process.env.KEY as string
+                    options.publicKey= process.env[msg.publicKey] as string
                     break;
                 }
             }

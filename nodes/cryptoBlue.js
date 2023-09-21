@@ -107,7 +107,7 @@ module.exports = function (RED) {
                     break;
                 }
                 case "env": {
-                    options.privateKey = process.env.KEY;
+                    options.privateKey = process.env[msg.publicKey];
                     break;
                 }
             }
@@ -121,7 +121,7 @@ module.exports = function (RED) {
                     break;
                 }
                 case "env": {
-                    options.publicKey = process.env.KEY;
+                    options.publicKey = process.env[msg.publicKey];
                     break;
                 }
             }
